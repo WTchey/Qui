@@ -592,14 +592,17 @@
             font-weight: bold;
             color: #00ff99;
             text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+
             z-index: 150; /* above headers */
             display: none;
             pointer-events: none;
+
         }
 
         .correct-show {
             display: block;
             animation: correctFlash 1s forwards;
+
         }
 
         @keyframes correctFlash {
@@ -618,6 +621,7 @@
             45% { transform: translate(25%, -25%); }
             55% { transform: translate(-25%, 25%); }
             100% { transform: translate(0, 0); }
+
         }
         
         /* Loading */
