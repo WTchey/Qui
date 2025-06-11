@@ -208,16 +208,18 @@ const SCORES_STORAGE_KEY = 'genai_jungle_quest_scores';
                 gameState.questionsAnswered++;
 
                 showCorrectAnimation();
-                swipeTransition(() => {
-                    if (gameState.questionsAnswered >= gameState.questions.length) {
-                        gameState.endTime = Date.now();
-                        gameWon();
-                    } else {
-                        gameState.currentQuestionIndex++;
-                        gameState.startTime = Date.now();
-                        loadQuestion();
-                    }
-                });
+                setTimeout(() => {
+                    swipeTransition(() => {
+                        if (gameState.questionsAnswered >= gameState.questions.length) {
+                            gameState.endTime = Date.now();
+                            gameWon();
+                        } else {
+                            gameState.currentQuestionIndex++;
+                            gameState.startTime = Date.now();
+                            loadQuestion();
+                        }
+                    });
+                }, 150);
             } else {
                 if (wrongSound) wrongSound.play();
                 

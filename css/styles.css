@@ -592,13 +592,17 @@
             font-weight: bold;
             color: #00ff99;
             text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
-            z-index: 4;
+
+            z-index: 150; /* above headers */
             display: none;
+            pointer-events: none;
+
         }
 
         .correct-show {
             display: block;
-            animation: correctFlash 0.8s forwards;
+            animation: correctFlash 1s forwards;
+
         }
 
         @keyframes correctFlash {
@@ -609,14 +613,15 @@
 
         /* Swipe transition for next question */
         .swipe-transition {
-            animation: swipeTransition 0.6s forwards;
+            animation: swipeTransition 0.7s ease-in-out forwards;
         }
 
         @keyframes swipeTransition {
-            0% { transform: translateX(0); }
-            45% { transform: translateX(100%); }
-            55% { transform: translateX(-100%); }
-            100% { transform: translateX(0); }
+            0% { transform: translate(0, 0); }
+            45% { transform: translate(25%, -25%); }
+            55% { transform: translate(-25%, 25%); }
+            100% { transform: translate(0, 0); }
+
         }
         
         /* Loading */
