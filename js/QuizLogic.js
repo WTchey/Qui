@@ -31,6 +31,12 @@ const SCORES_STORAGE_KEY = 'genai_jungle_quest_scores';
 
         // Mobile still uses a single background as no alternate versions exist
         const backgroundImagesMobile = new Array(15).fill('assets/images/jungle_main_2_roads_mobile.png');
+
+        // Preload an image to avoid flicker during transitions
+        function preloadImage(src) {
+            const img = new Image();
+            img.src = src;
+        }
         
         // Audio elements
         let correctSound, wrongSound, winnerSound;
@@ -213,6 +219,13 @@ const SCORES_STORAGE_KEY = 'genai_jungle_quest_scores';
                 gameState.attempts = 0;
                 gameState.questionsAnswered++;
 
+                // Preload background for the next question during the transition
+                const nextIndex = gameState.currentQuestionIndex + 1;
+                const nextDesktop = backgroundImagesDesktop[nextIndex % backgroundImagesDesktop.length];
+                const nextMobile = backgroundImagesMobile[nextIndex % backgroundImagesMobile.length];
+                preloadImage(nextDesktop);
+                preloadImage(nextMobile);
+
                 showCorrectAnimation();
                 setTimeout(() => {
                     swipeTransition(() => {
@@ -289,9 +302,9 @@ const SCORES_STORAGE_KEY = 'genai_jungle_quest_scores';
         function swipeTransition(callback) {
             if (gameScreen) {
                 gameScreen.classList.add('swipe-transition');
+                if (callback) callback();
                 setTimeout(() => {
                     gameScreen.classList.remove('swipe-transition');
-                    if (callback) callback();
                 }, 400);
             } else if (callback) {
                 callback();
