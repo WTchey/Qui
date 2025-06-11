@@ -276,7 +276,7 @@ const SCORES_STORAGE_KEY = 'genai_jungle_quest_scores';
                 correctOverlay.classList.add('correct-show');
                 setTimeout(() => {
                     correctOverlay.classList.remove('correct-show');
-                }, 800);
+                }, 600);
             }
         }
 
@@ -286,7 +286,7 @@ const SCORES_STORAGE_KEY = 'genai_jungle_quest_scores';
                 setTimeout(() => {
                     gameScreen.classList.remove('swipe-transition');
                     if (callback) callback();
-                }, 600);
+                }, 500);
             } else if (callback) {
                 callback();
             }
