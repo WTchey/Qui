@@ -19,8 +19,6 @@
             formSubmitted: false
         };
         
-        // Local storage key for scores
-const SCORES_STORAGE_KEY = 'genai_jungle_quest_scores';
 
         // Background images for each question (cycle through a few variations)
         const backgroundImagesDesktop = [
@@ -29,9 +27,11 @@ const SCORES_STORAGE_KEY = 'genai_jungle_quest_scores';
             'assets/images/jungle_road_3_16_9.png.png'
         ];
 
-        // Mobile still uses a single background as no alternate versions exist
-        const backgroundImagesMobile = new Array(15).fill('assets/images/jungle_main_2_roads_mobile.png');
-
+        // Mobile background images (cycle through variations)
+        const backgroundImagesMobile = [
+            "assets/images/jungle_main_2_roads_mobile.png",
+            "assets/images/jungle_main_2_roads_mobile_2.png"
+        ];
         // Preload an image to avoid flicker during transitions
         function preloadImage(src) {
             const img = new Image();
@@ -158,12 +158,6 @@ const SCORES_STORAGE_KEY = 'genai_jungle_quest_scores';
         function getRandomQuestions(allQuestions, count) {
             const shuffled = [...allQuestions].sort(() => 0.5 - Math.random());
             return shuffled.slice(0, Math.min(count, shuffled.length));
-        }
-        
-        // Local storage functions - REMOVED (keeping only for basic functionality)
-        function saveScore(scoreData) {
-            // Simplified - just return true since we're not storing scores anymore
-            return true;
         }
         
         // Select character
@@ -463,21 +457,6 @@ const SCORES_STORAGE_KEY = 'genai_jungle_quest_scores';
                     messageDiv.style.display = 'none';
                     
                     try {
-                        // Create score data for local storage
-                        const timeTaken = gameState.endTime - gameState.gameStartTime;
-                        const scoreData = {
-                            name: name,
-                            email: email,
-                            score: gameState.score,
-                            time: formatTimeTaken(timeTaken),
-                            date: new Date().toISOString(),
-                            character: gameState.selectedCharacter,
-                            questionsAnswered: gameState.questionsAnswered,
-                            totalQuestions: gameState.questions.length
-                        };
-                        
-                        // Save to local storage for leaderboard
-                        const localSaved = saveScore(scoreData);
                         
                         // Submit to Google Form using iframe method
                         const googleFormResult = await submitToGoogleForm(name, email);
