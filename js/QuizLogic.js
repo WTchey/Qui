@@ -22,8 +22,14 @@
         // Local storage key for scores
 const SCORES_STORAGE_KEY = 'genai_jungle_quest_scores';
 
-        // Background images for each question (using placeholders for now)
-        const backgroundImagesDesktop = new Array(15).fill('assets/images/jungle_main_2_roads_16_9.png');
+        // Background images for each question (cycle through a few variations)
+        const backgroundImagesDesktop = [
+            'assets/images/jungle_main_2_roads_16_9.png',
+            'assets/images/jungle_road_2_16_9.png',
+            'assets/images/jungle_road_3_16_9.png.png'
+        ];
+
+        // Mobile still uses a single background as no alternate versions exist
         const backgroundImagesMobile = new Array(15).fill('assets/images/jungle_main_2_roads_mobile.png');
         
         // Audio elements
@@ -286,7 +292,7 @@ const SCORES_STORAGE_KEY = 'genai_jungle_quest_scores';
                 setTimeout(() => {
                     gameScreen.classList.remove('swipe-transition');
                     if (callback) callback();
-                }, 600);
+                }, 400);
             } else if (callback) {
                 callback();
             }
