@@ -20,10 +20,15 @@
         };
         
         // Local storage key for scores
-        const SCORES_STORAGE_KEY = 'genai_jungle_quest_scores';
+const SCORES_STORAGE_KEY = 'genai_jungle_quest_scores';
+
+        // Background images for each question (using placeholders for now)
+        const backgroundImagesDesktop = new Array(15).fill('assets/images/jungle_main_2_roads_16_9.png');
+        const backgroundImagesMobile = new Array(15).fill('assets/images/jungle_main_2_roads_mobile.png');
         
         // Audio elements
         let correctSound, wrongSound, winnerSound;
+        let desktopBg, mobileBg, correctOverlay;
         
         // DOM elements
         let loadingScreen, characterSelection, gameScreen, resultScreen, incorrectPopup, formModal;
@@ -41,6 +46,9 @@
                 resultScreen = document.getElementById('result-screen');
                 incorrectPopup = document.getElementById('incorrect-popup');
                 formModal = document.getElementById('form-modal');
+                desktopBg = document.querySelector('.jungle-background-desktop');
+                mobileBg = document.querySelector('.jungle-background-mobile');
+                correctOverlay = document.getElementById('correct-overlay');
                 
                 console.log('DOM elements initialized successfully');
             } catch (error) {
@@ -169,6 +177,10 @@
             
             // Randomly decide which road (left or right) will have the fact
             gameState.factIsLeft = Math.random() > 0.5;
+
+            // Update background images
+            if (desktopBg) desktopBg.src = backgroundImagesDesktop[gameState.currentQuestionIndex % backgroundImagesDesktop.length];
+            if (mobileBg) mobileBg.src = backgroundImagesMobile[gameState.currentQuestionIndex % backgroundImagesMobile.length];
             
             // Set question texts
             document.getElementById('left-text').textContent = gameState.factIsLeft ? question.fact : question.myth;
@@ -186,25 +198,26 @@
             
             if (isCorrect) {
                 if (correctSound) correctSound.play();
-                
+
                 // Calculate score based on time and attempts
                 const timeTaken = Date.now() - gameState.startTime;
                 gameState.score += calculateScore(gameState.attempts, timeTaken);
-                
+
                 // Reset attempts and update questions answered
                 gameState.attempts = 0;
                 gameState.questionsAnswered++;
-                
-                // Check if game is won
-                if (gameState.questionsAnswered >= gameState.questions.length) {
-                    gameState.endTime = Date.now();
-                    gameWon();
-                } else {
-                    // Move to next question
-                    gameState.currentQuestionIndex++;
-                    gameState.startTime = Date.now();
-                    loadQuestion();
-                }
+
+                showCorrectAnimation();
+                swipeTransition(() => {
+                    if (gameState.questionsAnswered >= gameState.questions.length) {
+                        gameState.endTime = Date.now();
+                        gameWon();
+                    } else {
+                        gameState.currentQuestionIndex++;
+                        gameState.startTime = Date.now();
+                        loadQuestion();
+                    }
+                });
             } else {
                 if (wrongSound) wrongSound.play();
                 
@@ -254,6 +267,27 @@
         // Try again after incorrect answer
         function tryAgain() {
             if (incorrectPopup) incorrectPopup.style.display = 'none';
+        }
+
+        function showCorrectAnimation() {
+            if (correctOverlay) {
+                correctOverlay.classList.add('correct-show');
+                setTimeout(() => {
+                    correctOverlay.classList.remove('correct-show');
+                }, 800);
+            }
+        }
+
+        function swipeTransition(callback) {
+            if (gameScreen) {
+                gameScreen.classList.add('swipe-transition');
+                setTimeout(() => {
+                    gameScreen.classList.remove('swipe-transition');
+                    if (callback) callback();
+                }, 600);
+            } else if (callback) {
+                callback();
+            }
         }
         
         // Game over
